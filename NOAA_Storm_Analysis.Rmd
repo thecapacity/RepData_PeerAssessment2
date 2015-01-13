@@ -43,7 +43,9 @@ search()
 
 ## Data Processing
 
-This section outlines (in words and code) how the data were loaded into R and processed for subsequent analysis. **Analysis will start from the raw CSV file containing the data; and there will be no preprocessing outside of this document.**
+This section outlines (in words and code) how the data were loaded into R and processed for subsequent analysis.
+
+**Analysis will start from the raw CSV file containing the data; and there will be no preprocessing outside of this document.**
 
 **If preprocessing is time-consuming the cache = TRUE option may be used for certain code chunks.**
 
@@ -53,17 +55,15 @@ This section outlines (in words and code) how the data were loaded into R and pr
 
 data_url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
 data_file <- "data_dir/data"
+dateDownloaded <- date()
 
 if (! file.exists("data_dir")) {
     dir.create("data_dir")
     bz_data_file <- "./data_dir/data.bz2"
     download.file(data_url, mode="wb", destfile=bz_data_file, method="curl")
-    dateDownloaded <- date()
     system2("bunzip2", args=c("-dfq", "data_dir/data.bz2") )
 }
 
-## NOTE THIS IS JUST 100 ROWS FOR TESTING PURPOSES!!!!
-data_file <- "data_dir/test_data"
 # Note, data is extracted every time - but not necessarially downloaded - to ensure consistency
 if ( file.exists(data_file)) {
     my_data <- read.csv(data_file)
@@ -72,10 +72,16 @@ if ( file.exists(data_file)) {
 
 The data used for this analysis was downloadd on ```r dateDownloaded```.
 
-The first two lines for this data file are:
+Some information on the overall file length is:
 ```{r}
+# The total line count for this file is:
+system2("wc", args=c("-l", data_file), stdout = TRUE)
+
+# The first two lines for this data file are:
 readLines(data_file, 2)
 ```
+
+R reads ```r dim(my_data)[1]``` total observations.
 
 #### Analysis
 

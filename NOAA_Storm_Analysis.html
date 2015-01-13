@@ -78,15 +78,51 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 library(knitr)
 opts_chunk$set(echo = TRUE, fig.path=&quot;figure/&quot;, dev=&quot;png&quot;)</code></pre>
 <p>These global defaults are set, or suggested <code># As comments</code> to promote consistent behavior.</p>
+<p>This work was done on a Macbook, running OSX 10.9 with the software stack summarized as follows:</p>
+<pre class="r"><code># Summarize the Operating Environment
+
+search()</code></pre>
+<pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;package:knitr&quot;     &quot;package:stats&quot;    
+##  [4] &quot;package:graphics&quot;  &quot;package:grDevices&quot; &quot;package:utils&quot;    
+##  [7] &quot;package:datasets&quot;  &quot;package:methods&quot;   &quot;Autoloads&quot;        
+## [10] &quot;package:base&quot;</code></pre>
+<p><strong>This analysis also assumes the bzunzip2 command is available to extract the data via the command line.</strong></p>
 </div>
 </div>
 </div>
 <div id="data-processing" class="section level2">
 <h2>Data Processing</h2>
-<p>This section outlines (in words and code) how the data were loaded into R and processed for subsequent analysis. <strong>Analysis will start from the raw CSV file containing the data; and there will be no preprocessing outside of this document.</strong></p>
+<p>This section outlines (in words and code) how the data were loaded into R and processed for subsequent analysis.</p>
+<p><strong>Analysis will start from the raw CSV file containing the data; and there will be no preprocessing outside of this document.</strong></p>
 <p><strong>If preprocessing is time-consuming the cache = TRUE option may be used for certain code chunks.</strong></p>
 <pre class="r"><code>## Data Processing Code is here, to load and format the data
-##      Subsequent analysis, actually deriving results is captured in the analysis sub-section.</code></pre>
+##      Subsequent analysis, actually deriving results is captured in the analysis sub-section.
+
+data_url &lt;- &quot;https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2&quot;
+data_file &lt;- &quot;data_dir/data&quot;
+dateDownloaded &lt;- date()
+
+if (! file.exists(&quot;data_dir&quot;)) {
+    dir.create(&quot;data_dir&quot;)
+    bz_data_file &lt;- &quot;./data_dir/data.bz2&quot;
+    download.file(data_url, mode=&quot;wb&quot;, destfile=bz_data_file, method=&quot;curl&quot;)
+    system2(&quot;bunzip2&quot;, args=c(&quot;-dfq&quot;, &quot;data_dir/data.bz2&quot;) )
+}
+
+# Note, data is extracted every time - but not necessarially downloaded - to ensure consistency
+if ( file.exists(data_file)) {
+    my_data &lt;- read.csv(data_file)
+}</code></pre>
+<p>The data used for this analysis was downloadd on <code>Tue Jan 13 08:45:06 2015</code>.</p>
+<p>Some information on the overall file length is:</p>
+<pre class="r"><code># The total line count for this file is:
+system2(&quot;wc&quot;, args=c(&quot;-l&quot;, data_file), stdout = TRUE)</code></pre>
+<pre><code>## [1] &quot; 1232705 data_dir/data&quot;</code></pre>
+<pre class="r"><code># The first two lines for this data file are:
+readLines(data_file, 2)</code></pre>
+<pre><code>## [1] &quot;\&quot;STATE__\&quot;,\&quot;BGN_DATE\&quot;,\&quot;BGN_TIME\&quot;,\&quot;TIME_ZONE\&quot;,\&quot;COUNTY\&quot;,\&quot;COUNTYNAME\&quot;,\&quot;STATE\&quot;,\&quot;EVTYPE\&quot;,\&quot;BGN_RANGE\&quot;,\&quot;BGN_AZI\&quot;,\&quot;BGN_LOCATI\&quot;,\&quot;END_DATE\&quot;,\&quot;END_TIME\&quot;,\&quot;COUNTY_END\&quot;,\&quot;COUNTYENDN\&quot;,\&quot;END_RANGE\&quot;,\&quot;END_AZI\&quot;,\&quot;END_LOCATI\&quot;,\&quot;LENGTH\&quot;,\&quot;WIDTH\&quot;,\&quot;F\&quot;,\&quot;MAG\&quot;,\&quot;FATALITIES\&quot;,\&quot;INJURIES\&quot;,\&quot;PROPDMG\&quot;,\&quot;PROPDMGEXP\&quot;,\&quot;CROPDMG\&quot;,\&quot;CROPDMGEXP\&quot;,\&quot;WFO\&quot;,\&quot;STATEOFFIC\&quot;,\&quot;ZONENAMES\&quot;,\&quot;LATITUDE\&quot;,\&quot;LONGITUDE\&quot;,\&quot;LATITUDE_E\&quot;,\&quot;LONGITUDE_\&quot;,\&quot;REMARKS\&quot;,\&quot;REFNUM\&quot;&quot;
+## [2] &quot;1.00,4/18/1950 0:00:00,\&quot;0130\&quot;,\&quot;CST\&quot;,97.00,\&quot;MOBILE\&quot;,\&quot;AL\&quot;,\&quot;TORNADO\&quot;,0.00,,,,,0.00,,0.00,,,14.00,100.00,\&quot;3\&quot;,0.00,0.00,15.00,25.00,\&quot;K\&quot;,0.00,,,,,3040.00,8812.00,3051.00,8806.00,,1.00&quot;</code></pre>
+<p>R reads <code>902297</code> total observations.</p>
 <div id="analysis" class="section level4">
 <h4>Analysis</h4>
 <p><strong>The document must have at least one figure containing a plot.</strong></p>
