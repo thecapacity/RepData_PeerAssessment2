@@ -1,0 +1,25 @@
+---
+title: "RepData_PeerAssignment2"
+author: "thecapacity"
+date: "January 12, 2015"
+output: html_document
+---
+
+This the R Markdown document associated with my repository located at: https://github.com/thecapacity/RepData_PeerAssessment2
+
+This document will be used to capture the results of my data analysis in order to make them reproducable, and will be published at my [RPubs Account](http://rpubs.com/thecapacity/).
+
+This document will represent a stand alone assessment, but for more details please check out the [GitHub Repository](http://rpubs.com/thecapacity/).
+
+```{r setoptions}
+### Setup some defaults
+
+# Ensure pristine working environment
+## rm(list=ls())
+## This has been commented out for submission to ensure no disruptivie side-effets for others
+
+library(knitr)
+opts_chunk$set(echo = TRUE, fig.path="figure/", dev="png")
+```
+
+These global defaults are set, or suggested ```# As comments``` to ensure consistent behavior.
