@@ -52,21 +52,30 @@ This section outlines (in words and code) how the data were loaded into R and pr
 ##      Subsequent analysis, actually deriving results is captured in the analysis sub-section.
 
 data_url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+data_file <- "data_dir/data"
 
 if (! file.exists("data_dir")) {
     dir.create("data_dir")
-    data_file <- "./data_dir/data.bz2"
-    download.file(data_url, mode="wb", destfile=data_file, method="curl")
+    bz_data_file <- "./data_dir/data.bz2"
+    download.file(data_url, mode="wb", destfile=bz_data_file, method="curl")
     dateDownloaded <- date()
     system2("bunzip2", args=c("-dfq", "data_dir/data.bz2") )
 }
+
+## NOTE THIS IS JUST 100 ROWS FOR TESTING PURPOSES!!!!
+data_file <- "data_dir/test_data"
 # Note, data is extracted every time - but not necessarially downloaded - to ensure consistency
-if ( file.exists("data_dir/data")) {
-    my_data <- read.csv("data_dir/data")
+if ( file.exists(data_file)) {
+    my_data <- read.csv(data_file)
 }
 ```
 
 The data used for this analysis was downloadd on ```r dateDownloaded```.
+
+The first two lines for this data file are:
+```{r}
+readLines(data_file, 2)
+```
 
 #### Analysis
 
