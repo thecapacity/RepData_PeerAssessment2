@@ -7,3 +7,5 @@ data_dir/*
 
 NOAA_Storm_Analysis_cache/*
 
+
+.RDataTmp
