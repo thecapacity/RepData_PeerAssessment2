@@ -39,7 +39,7 @@ This work was done on a Macbook, running OSX 10.9 with the software stack summar
 search()
 ```
 
-**This analysis also assumes the bzunzip2 command is available to extract the data.**
+**This analysis also assumes the bzunzip2 command is available to extract the data via the command line.**
 
 ## Data Processing
 
