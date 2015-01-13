@@ -18,6 +18,11 @@ There is also some documentation of the database available here:
 
 * National Climatic Data Center [Storm Events FAQ](https://d396qusza40orc.cloudfront.net/repdata%2Fpeer2_doc%2FNCDC%20Storm%20Events-FAQ%20Page.pdf)
 
+* Additional Considerations from Course Postings are as follows:
+    * https://class.coursera.org/repdata-010/forum/thread?thread_id=36
+    * https://class.coursera.org/repdata-010/forum/thread?thread_id=37
+    * https://class.coursera.org/repdata-010/forum/thread?thread_id=55
+
 The events in the database start in the year 1950 and end in November 2011. In the earlier years of the database there are generally fewer events recorded, most likely due to a lack of good records. More recent years should be considered more complete.
 
 ### Guidance

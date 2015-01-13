@@ -79,13 +79,39 @@ library(knitr)
 opts_chunk$set(echo = TRUE, fig.path=&quot;figure/&quot;, dev=&quot;png&quot;)</code></pre>
 <p>These global defaults are set, or suggested <code># As comments</code> to promote consistent behavior.</p>
 <p>This work was done on a Macbook, running OSX 10.9 with the software stack summarized as follows:</p>
-<pre class="r"><code># Summarize the Operating Environment
-
-search()</code></pre>
-<pre><code>##  [1] &quot;.GlobalEnv&quot;        &quot;package:knitr&quot;     &quot;package:stats&quot;    
-##  [4] &quot;package:graphics&quot;  &quot;package:grDevices&quot; &quot;package:utils&quot;    
-##  [7] &quot;package:datasets&quot;  &quot;package:methods&quot;   &quot;Autoloads&quot;        
-## [10] &quot;package:base&quot;</code></pre>
+<pre class="r"><code># Summarize the analysis environment
+version</code></pre>
+<pre><code>##                _                           
+## platform       x86_64-apple-darwin13.4.0   
+## arch           x86_64                      
+## os             darwin13.4.0                
+## system         x86_64, darwin13.4.0        
+## status                                     
+## major          3                           
+## minor          1.2                         
+## year           2014                        
+## month          10                          
+## day            31                          
+## svn rev        66913                       
+## language       R                           
+## version.string R version 3.1.2 (2014-10-31)
+## nickname       Pumpkin Helmet</code></pre>
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>## R version 3.1.2 (2014-10-31)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] knitr_1.8
+## 
+## loaded via a namespace (and not attached):
+## [1] digest_0.6.6     evaluate_0.5.5   formatR_1.0      htmltools_0.2.6 
+## [5] rmarkdown_0.3.10 stringr_0.6.2    tools_3.1.2      yaml_2.1.13</code></pre>
 <p><strong>This analysis also assumes the bzunzip2 command is available to extract the data via the command line.</strong></p>
 </div>
 </div>

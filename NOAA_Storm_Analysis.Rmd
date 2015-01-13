@@ -34,9 +34,10 @@ These global defaults are set, or suggested ```# As comments``` to promote consi
 
 This work was done on a Macbook, running OSX 10.9 with the software stack summarized as follows:
 ```{r}
-# Summarize the Operating Environment
+# Summarize the analysis environment
+version
 
-search()
+sessionInfo()
 ```
 
 **This analysis also assumes the bzunzip2 command is available to extract the data via the command line.**
