@@ -9,6 +9,10 @@ output: html_document
 
 **The Results were as follows... ##```"FILL THIS IN"```**
 
+### Synopsis:
+
+**```THIS should be a synopsis which describes and summarizes analysis in at most 10 complete sentences.```**
+
 #### Background
 
 This the R Markdown document associated with my repository located at: https://github.com/thecapacity/RepData_PeerAssessment2
@@ -28,4 +32,40 @@ opts_chunk$set(echo = TRUE, fig.path="figure/", dev="png")
 
 These global defaults are set, or suggested ```# As comments``` to promote consistent behavior.
 
-## Introduction
+## Data Processing
+
+This section outlines (in words and code) how the data were loaded into R and processed for subsequent analysis. **Analysis will start from the raw CSV file containing the data; and there will be no preprocessing outside of this document.**
+
+**If preprocessing is time-consuming the cache = TRUE option may be used for certain code chunks.**
+
+```{r dataProcessing }
+## Data Processing Code is here, to load and format the data
+##      Subsequent analysis, actually deriving results is captured in the analysis sub-section.
+
+```
+
+#### Analysis
+
+**The document must have at least one figure containing a plot.**
+
+**The must have no more than three figures. Figures may have multiple plots in them (i.e. panel plots), but there cannot be more than three figures total.**
+
+```{r analysis }
+## This captures the actual analysis and activities to derive final data
+##      Visual charts and graphs are presented in the Results section
+
+```
+
+## Results
+
+This Results section will present the final results.
+
+**The document must have at least one figure containing a plot.**
+
+**The document must have no more than three figures. Figures may have multiple plots in them (i.e. panel plots), but there cannot be more than three figures total.**
+
+```{r resutls }
+## Final Graphs and a summary of conclusions will be captured here, with
+##      all work being done bt the Data Processing Section (and the Analysis Sub-Sectin)
+
+```
