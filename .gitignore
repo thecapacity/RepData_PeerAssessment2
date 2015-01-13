@@ -3,3 +3,4 @@
 .RData
 
 data_dir/data.bz2
+data_dir/*
