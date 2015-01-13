@@ -32,17 +32,41 @@ opts_chunk$set(echo = TRUE, fig.path="figure/", dev="png")
 
 These global defaults are set, or suggested ```# As comments``` to promote consistent behavior.
 
+This work was done on a Macbook, running OSX 10.9 with the software stack summarized as follows:
+```{r}
+# Summarize the Operating Environment
+
+search()
+```
+
+**This analysis also assumes the bzunzip2 command is available to extract the data.**
+
 ## Data Processing
 
 This section outlines (in words and code) how the data were loaded into R and processed for subsequent analysis. **Analysis will start from the raw CSV file containing the data; and there will be no preprocessing outside of this document.**
 
 **If preprocessing is time-consuming the cache = TRUE option may be used for certain code chunks.**
 
-```{r dataProcessing }
+```{r dataDownload, cache=TRUE }
 ## Data Processing Code is here, to load and format the data
 ##      Subsequent analysis, actually deriving results is captured in the analysis sub-section.
 
+data_url <- "https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2FStormData.csv.bz2"
+
+if (! file.exists("data_dir")) {
+    dir.create("data_dir")
+    data_file <- "./data_dir/data.bz2"
+    download.file(data_url, mode="wb", destfile=data_file, method="curl")
+    dateDownloaded <- date()
+    system2("bunzip2", args=c("-dfq", "data_dir/data.bz2") )
+}
+# Note, data is extracted every time - but not necessarially downloaded - to ensure consistency
+if ( file.exists("data_dir/data")) {
+    my_data <- read.csv("data_dir/data")
+}
 ```
+
+The data used for this analysis was downloadd on ```r dateDownloaded```.
 
 #### Analysis
 
