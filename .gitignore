@@ -2,4 +2,4 @@
 .Rhistory
 .RData
 
-data/data.bz2
+data_dir/data.bz2
