@@ -33,7 +33,8 @@ Per advice from the instructor, this analysis has been loosely modeled off the e
 
 **The final output for this assignment will be generated via the console with:** ```knit2html("NOAA_Storm_Analysis.Rmd")```.
 
-```{r setoptions}
+
+```r
 ### Setup some defaults
 
 # Ensure pristine working environment
@@ -48,14 +49,59 @@ options(scipen = 1) # Turn off scientific notations for numbers
 library(data.table)
 ```
 
+```
+## data.table 1.9.4  For help type: ?data.table
+## *** NB: by=.EACHI is now explicit. See README to restore previous behaviour.
+```
+
 *These global defaults are set, or suggested ```# As comments``` to promote consistent behavior.*
 
 This work was done on a Macbook, running OSX 10.9 with the software stack summarized as follows:
-```{r platformInfo, cache=TRUE}
+
+```r
 # Summarize the analysis environment
 version
+```
 
+```
+##                _                           
+## platform       x86_64-apple-darwin13.4.0   
+## arch           x86_64                      
+## os             darwin13.4.0                
+## system         x86_64, darwin13.4.0        
+## status                                     
+## major          3                           
+## minor          1.2                         
+## year           2014                        
+## month          10                          
+## day            31                          
+## svn rev        66913                       
+## language       R                           
+## version.string R version 3.1.2 (2014-10-31)
+## nickname       Pumpkin Helmet
+```
+
+```r
 sessionInfo()
+```
+
+```
+## R version 3.1.2 (2014-10-31)
+## Platform: x86_64-apple-darwin13.4.0 (64-bit)
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] data.table_1.9.4 knitr_1.8       
+## 
+## loaded via a namespace (and not attached):
+##  [1] chron_2.3-45     digest_0.6.6     evaluate_0.5.5   formatR_1.0     
+##  [5] htmltools_0.2.6  plyr_1.8.1       Rcpp_0.11.3      reshape2_1.4.1  
+##  [9] rmarkdown_0.3.10 stringr_0.6.2    tools_3.1.2      yaml_2.1.13
 ```
 
 **This fully analysis assumes the ```bzunzip2``` and ```wc``` commands are available to extract the data via the command line.**
@@ -68,7 +114,8 @@ This section outlines (in words and code) how the data were loaded into R and pr
 
 **As some preprocessing is time-consuming the cache = TRUE option may be used for certain code chunks.**
 
-```{r dataDownload, cache=TRUE}
+
+```r
 ## Data Processing Code is here, to load and format the data
 ##      Subsequent analysis, actually deriving results is captured in the analysis sub-section.
 
@@ -84,7 +131,8 @@ if (! file.exists("data_dir")) {
 }
 ```
 
-```{r dataLoad, cache=TRUE}
+
+```r
 # Note, data is extracted every time - but not necessarially downloaded - to ensure consistency
 if ( file.exists(data_file)) {
     my_data <- data.table( read.csv(data_file) )
@@ -94,23 +142,59 @@ if ( file.exists(data_file)) {
 
 # The first few lines for this data file are:
 readLines(data_file, 3)
+```
 
+```
+## [1] "\"STATE__\",\"BGN_DATE\",\"BGN_TIME\",\"TIME_ZONE\",\"COUNTY\",\"COUNTYNAME\",\"STATE\",\"EVTYPE\",\"BGN_RANGE\",\"BGN_AZI\",\"BGN_LOCATI\",\"END_DATE\",\"END_TIME\",\"COUNTY_END\",\"COUNTYENDN\",\"END_RANGE\",\"END_AZI\",\"END_LOCATI\",\"LENGTH\",\"WIDTH\",\"F\",\"MAG\",\"FATALITIES\",\"INJURIES\",\"PROPDMG\",\"PROPDMGEXP\",\"CROPDMG\",\"CROPDMGEXP\",\"WFO\",\"STATEOFFIC\",\"ZONENAMES\",\"LATITUDE\",\"LONGITUDE\",\"LATITUDE_E\",\"LONGITUDE_\",\"REMARKS\",\"REFNUM\""
+## [2] "1.00,4/18/1950 0:00:00,\"0130\",\"CST\",97.00,\"MOBILE\",\"AL\",\"TORNADO\",0.00,,,,,0.00,,0.00,,,14.00,100.00,\"3\",0.00,0.00,15.00,25.00,\"K\",0.00,,,,,3040.00,8812.00,3051.00,8806.00,,1.00"                                                                                                                                                                                                                                                                                       
+## [3] "1.00,4/18/1950 0:00:00,\"0145\",\"CST\",3.00,\"BALDWIN\",\"AL\",\"TORNADO\",0.00,,,,,0.00,,0.00,,,2.00,150.00,\"2\",0.00,0.00,0.00,2.50,\"K\",0.00,,,,,3042.00,8755.00,0.00,0.00,,2.00"
+```
+
+```r
 # The first few lines of the data read are:
 head(my_data, 3)
 ```
 
-The data used for this analysis was downloaded on ```r dateDownloaded```.
+```
+##    STATE__          BGN_DATE BGN_TIME TIME_ZONE COUNTY COUNTYNAME STATE
+## 1:       1 4/18/1950 0:00:00     0130       CST     97     MOBILE    AL
+## 2:       1 4/18/1950 0:00:00     0145       CST      3    BALDWIN    AL
+## 3:       1 2/20/1951 0:00:00     1600       CST     57    FAYETTE    AL
+##     EVTYPE BGN_RANGE BGN_AZI BGN_LOCATI END_DATE END_TIME COUNTY_END
+## 1: TORNADO         0                                               0
+## 2: TORNADO         0                                               0
+## 3: TORNADO         0                                               0
+##    COUNTYENDN END_RANGE END_AZI END_LOCATI LENGTH WIDTH F MAG FATALITIES
+## 1:         NA         0                      14.0   100 3   0          0
+## 2:         NA         0                       2.0   150 2   0          0
+## 3:         NA         0                       0.1   123 2   0          0
+##    INJURIES PROPDMG PROPDMGEXP CROPDMG CROPDMGEXP WFO STATEOFFIC ZONENAMES
+## 1:       15    25.0          K       0                                    
+## 2:        0     2.5          K       0                                    
+## 3:        2    25.0          K       0                                    
+##    LATITUDE LONGITUDE LATITUDE_E LONGITUDE_ REMARKS REFNUM
+## 1:     3040      8812       3051       8806              1
+## 2:     3042      8755          0          0              2
+## 3:     3340      8742          0          0              3
+```
+
+The data used for this analysis was downloaded on ``Sun Jan 25 16:48:05 2015``.
 
 Some information on the overall file length is:
-```{r systemWC, cache=TRUE}
+
+```r
 # The total line count for this file is:
 system2("wc", args=c("-l", data_file), stdout = TRUE)
 ```
+
+```
+## [1] " 1232705 data_dir/data"
+```
 **Note, the above command will likely only work on a Unix-like platform.**
 
-R reads ```r dim(my_data)[1]``` total observations, for an object size of ```r object.size(my_data)```.  
+R reads ``902297`` total observations, for an object size of ``4.293384 &times; 10<sup>8</sup>``.  
     The alternate command ```read.csv(data_file, comment.char = "#", na.strings = "")``` was tried with identical results.  
-    *During this analysis, ```object.size(my_data)``` was ```r object.size(my_data)```.*  
+    *During this analysis, ```object.size(my_data)``` was ``4.293384 &times; 10<sup>8</sup>``.*  
 
 Note, the following activities were considered - **but not conducted** - to clean/augment the data:
     
@@ -124,7 +208,8 @@ Note, the following activities were considered - **but not conducted** - to clea
 
 This subsection of our processing activities captures the data summization activities conducted for subsequent analysis.
 
-```{r summaryData, cache=TRUE}
+
+```r
 summary_data <- data.table( DATE=my_data$BGN_DATE, TIME=my_data$BGN_TIME, STATE=my_data$STATE)
 summary_data$DATE <- as.character(summary_data$DATE)
 summary_data$TIME <- as.factor(summary_data$TIME)
@@ -138,8 +223,13 @@ summary_data$YEAR <- as.numeric(sapply(summary_data[, DATE], FUN=function(x) { s
 
 Missing values may cause subtle problems so we check to se what proportion of the observations are missing (i.e. coded as NA).
 
-```{r}
+
+```r
 mean( is.na(my_data) )
+```
+
+```
+## [1] 0.05229737
 ```
 
 Because the proportion of missing values is low (```0.05229737``` in our analysis), **we choose to ignore missing values for now**.
@@ -162,39 +252,125 @@ Data variability might also be a problem (e.g. misspellings, etc) however for th
 
 
 #### 1. First, let us look at the total incidents by state:
-```{r question1, cache=TRUE}
+
+```r
 incidents_by_state <- table(summary_data$STATE)
 
 incidents_by_state
 ```
 
-In our analysis, every state had at least ```1``` reported incident with the maxium number being ```r max(incidents_by_state)```, which belonged to ```TX```.  
+```
+## 
+##    AK    AL    AM    AN    AR    AS    AZ    CA    CO    CT    DC    DE 
+##  4391 22739  1879  3250 27102   257  6156 10780 20473  3294   437  1913 
+##    FL    GA    GM    GU    HI    IA    ID    IL    IN    KS    KY    LA 
+## 22124 25259  5337   306  2547 31069  4767 28488 21506 53440 22092 17323 
+##    LC    LE    LH    LM    LO    LS    MA    MD    ME    MH    MI    MN 
+##   274  1526   654  1347    70   262  5652  8185  4524     1 17910 23609 
+##    MO    MS    MT    NC    ND    NE    NH    NJ    NM    NV    NY    OH 
+## 35648 22192 14695 25351 14632 30271  3022  8075  7129  3139 21058 24922 
+##    OK    OR    PA    PH    PK    PM    PR    PZ    RI    SC    SD    SL 
+## 46802  4821 22226    28    23     1  3015    96   839 17126 21727     7 
+##    ST    TN    TX    UT    VA    VI    VT    WA    WI    WV    WY    XX 
+##     1 21721 83728  4135 21189   338  3871  3312 19781  9099  7332     2
+```
+
+In our analysis, every state had at least ```1``` reported incident with the maxium number being ``83728``, which belonged to ```TX```.  
 *Apparently R prints the 'key' on the console, with ```sort(incidents_by_state, decreasing=TRUE)[1]``` knitr will not.*
 
 #### 2. Next, let us look at the overall start time for events captured.
-```{r, question3, cache=TRUE}
+
+```r
 incidents_by_start_time <- table(summary_data$TIME)
 
 # Start Time summary not printed due to the large number of results.
 ## incidents_by_start_time
 ```
 
-The greatest number of events for a single time (```CST```) was: ```r sort(incidents_by_start_time, decreasing=TRUE)[1]```.
+The greatest number of events for a single time (```CST```) was: ``10163``.
 
-The with no time factor having less than```r min(incidents_by_start_time)``` event.
+The with no time factor having less than``1`` event.
 
 *Again, R makes it hard to find the 'key' associated with the major|minor value, so they are left as an exercise to the reader.*
 
 #### 3. Finally, let us look at the overall impact by year:
-```{r, question2, cache=TRUE}
+
+```r
 impact_by_year <- summary_data[, sum(IMPACT), by = YEAR]
 
 impact_by_year
 ```
 
-The year with the greatest number of injuries and deaths is: ```r impact_by_year[ V1==max(impact_by_year[,V1]), YEAR]```.
+```
+##     YEAR    V1
+##  1: 1950   729
+##  2: 1951   558
+##  3: 1952  2145
+##  4: 1953  5650
+##  5: 1954   751
+##  6: 1955  1055
+##  7: 1956  1438
+##  8: 1957  2169
+##  9: 1958   602
+## 10: 1959   792
+## 11: 1960   783
+## 12: 1961  1139
+## 13: 1962   581
+## 14: 1963   569
+## 15: 1964  1221
+## 16: 1965  5498
+## 17: 1966  2128
+## 18: 1967  2258
+## 19: 1968  2653
+## 20: 1969  1377
+## 21: 1970  1428
+## 22: 1971  2882
+## 23: 1972  1003
+## 24: 1973  2495
+## 25: 1974  7190
+## 26: 1975  1517
+## 27: 1976  1239
+## 28: 1977   814
+## 29: 1978   972
+## 30: 1979  3098
+## 31: 1980  1185
+## 32: 1981   822
+## 33: 1982  1340
+## 34: 1983   853
+## 35: 1984  3018
+## 36: 1985  1625
+## 37: 1986   966
+## 38: 1987  1505
+## 39: 1988  1085
+## 40: 1989  1754
+## 41: 1990  1920
+## 42: 1991  1428
+## 43: 1992  1808
+## 44: 1995  5971
+## 45: 1994  4505
+## 46: 1993  2447
+## 47: 1996  3259
+## 48: 1997  4401
+## 49: 1998 11864
+## 50: 1999  6056
+## 51: 2000  3280
+## 52: 2001  3190
+## 53: 2002  3653
+## 54: 2003  3374
+## 55: 2004  2796
+## 56: 2005  2303
+## 57: 2006  3967
+## 58: 2007  2612
+## 59: 2008  3191
+## 60: 2009  1687
+## 61: 2010  2280
+## 62: 2011  8794
+##     YEAR    V1
+```
 
-The year with the least number of injuries and deaths is: ```r impact_by_year[ V1==min(impact_by_year[,V1]), YEAR]```.
+The year with the greatest number of injuries and deaths is: ``1998``.
+
+The year with the least number of injuries and deaths is: ``1951``.
 
 ## Results
 
@@ -202,20 +378,29 @@ This section will present the final results. Only final graphs and a discussion 
     *Per assignment guidance, figures may have multiple plots in them (i.e. panel plots), but there will not be more than three figures total.*
 
 #### 1. Incidents by State
-```{r}
+
+```r
 plot(incidents_by_state)
 ```
 
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png) 
+
 #### 2. Occurances by Start Time
-```{r}
+
+```r
 plot(incidents_by_start_time)
 ```
 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+
 #### 3. Yearly Impact
-```{r}
+
+```r
 plot(impact_by_year)
 abline(lm(impact_by_year$V1 ~ impact_by_year$YEAR))
 ```
+
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
 
 As we can see from the analysis, the overall impact (defined in our analysis as the sum of deaths and injuries) does appear to be going on a yearly basis. We also learned that being located Texas is a major risk factor. One potential future exploration would be to normalize impact by number of events and determine if states had 'learned' ways to control the overall impact, even in areas where there were high numbers of incidents.
 
