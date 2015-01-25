@@ -19,6 +19,8 @@ This the R Markdown document associated with my repository located at: https://g
 
 This document will be used to capture the results of my data analysis in order to make them reproducable, and will be published at my [RPubs Account](http://rpubs.com/thecapacity/). This document will represent a stand alone assessment, but for more details please check out the [GitHub Repository](http://rpubs.com/thecapacity/).
 
+Per advice from the instructor, this analysis has been loosely modeled off the example located here: http://www.rpubs.com/rdpeng/13396
+
 ```{r setoptions}
 ### Setup some defaults
 
@@ -28,6 +30,10 @@ This document will be used to capture the results of my data analysis in order t
 
 library(knitr)
 opts_chunk$set(echo = TRUE, fig.path="figure/", dev="png")
+
+# Load utility libraries
+library(data.table)
+library(lubridate)
 ```
 
 These global defaults are set, or suggested ```# As comments``` to promote consistent behavior.
@@ -68,7 +74,53 @@ if (! file.exists("data_dir")) {
 # Note, data is extracted every time - but not necessarially downloaded - to ensure consistency
 if ( file.exists(data_file)) {
     my_data <- read.csv(data_file)
+
+    # Obligatory Data Cleaning
+    my_data$TIME_ZONE <- gsub("CST", "CST6CDT", my_data$TIME_ZONE)
+        
+    build_when <- function(x) {
+        in_day <- x[1]
+        in_time <- x[2]
+        in_tz <- x[3]
+
+        d <- strsplit( as.character(in_day), " ")[[1]][1]
+        t <- strsplit( as.character(in_time), " ")[[1]][1]
+        when <- paste(d, t)
+        r <- strptime(when, format = "%m/%d/%Y %H%M", tz = in_tz)
+        # data.frame(when, r, row.names=NULL)
+        r
+    }
+    
+    apply(test_data[, c("BGN_DATE", "BGN_TIME", "TIME_ZONE")], 1, build_when)
+    
+    # For this analysis, we don't care about END_DATE or END_TIME but may want to convert it
+    # my_data$END_DATE <- as.Date(my_data$END_DATE, format = "%m/%d/%Y %H:%M:%S")
+    # my_data$END_TIME <- ...
+    
+---- RANDOM NOTES -----
+    my_data$UTC_DATE_TIME <- as.Date(my_data$BGN_DATE, format = "%m/%d/%Y %H:%M:%S", tz = my_data$TIME_ZONE)
+    my_data$BGN_TIME <- as.Date(my_data$BGN_DATE, format = "%m/%d/%Y %H:%M:%S")
+    
+    UTC_when <- test_data[, c("BGN_DATE", "BGN_TIME", "TIME_ZONE")]
+    
+    apply(conv_date_time, 1, function(x) c(x) )
+    
+    mdy(strsplit("2/13/1952 0:00:00", " ")[[1]][1])
+    apply(conv_date_time, 1, function(x) { strsplit(x[1], " ")[1][1] } )
+    ymd_hms
+    )
+---------------------
+
+    # Want to Normalize on UTC to avoid Time Zone Bias
+    
+    my_data <- data.table(my_data)
 }
+
+# Not strictly necessary, but kept for documentation/completness
+named(my_data) <- make.names( named(my_data) )
+
+
+
 ```
 
 The data used for this analysis was downloadd on ```r dateDownloaded```.
@@ -78,11 +130,20 @@ Some information on the overall file length is:
 # The total line count for this file is:
 system2("wc", args=c("-l", data_file), stdout = TRUE)
 
-# The first two lines for this data file are:
-readLines(data_file, 2)
+# The first few lines for this data file are:
+readLines(data_file, 3)
 ```
 
-R reads ```r dim(my_data)[1]``` total observations.
+R reads ```r dim(my_data)[1]``` total observations, for an object size of ```r object.size(my_data)```. The alternate command ```read.csv(data_file, comment.char = "#", na.strings = "")``` was tried with identical results.
+
+*During this analysis, ```object.size(my_data)``` was 429335024 bytes, or ~430 MB.*
+
+    Note the following activitie were done to clean/augment the data:
+    
+    * Instances of "CDT" for ```TIME_ZONE``` were changes to ```CDT6CST```
+    
+    This is because R does not recognize the string "CDT" as a valid timezone on my platform.
+
 
 #### Analysis
 
@@ -90,6 +151,27 @@ R reads ```r dim(my_data)[1]``` total observations.
 
 **The must have no more than three figures. Figures may have multiple plots in them (i.e. panel plots), but there cannot be more than three figures total.**
 
+Missing values may cause subtle problems so we check to se what proportion of the observations are missing (i.e. coded as NA).
+
+Because the number and type of events have changed over the years our analysis will focus on questions for the totality of data, i.e. regardless of event type.
+
+Specifically we are concerned with insights to answer the following questions:
+    
+* What time of day (UTC) are events most likely to occur?
+
+* Where (Lat and Long) are events most likely to occur?
+
+* Has the overall impact of the events (i.e. Fatalities + Injuries) increased over time?
+
+```{r}
+mean( is.na(my_data) )
+```
+
+Because the proportion of missing values is low (0.05229737), we choose to ignore missing values for now.
+
+Data variability might also be a problem (e.g. misspellings, etc) however for this analysis we assume minimal expected impact from those potential variations due to the questions being addressed.
+
+Fist let us look at the overall start time for events captured.
 ```{r analysis }
 ## This captures the actual analysis and activities to derive final data
 ##      Visual charts and graphs are presented in the Results section
