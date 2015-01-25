@@ -4,6 +4,7 @@
 
 data_dir/data.bz2
 data_dir/*
+cache/*
 
 NOAA_Storm_Analysis_cache/*
 
